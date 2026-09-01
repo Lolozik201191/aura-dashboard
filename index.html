@@ -542,6 +542,44 @@ detailHtml += '<tr><td>' + m + '</td><td>' + fmt(curVal) + '</td><td>' + fmt(pre
     document.getElementById('detailCard').style.display = 'block';
 }
 
+
+function showFoundersDetail() {
+    const detailBlock = document.getElementById('foundersDetail');
+    if (detailBlock.style.display === 'none' || detailBlock.style.display === '') {
+        let curFounders = {};
+        let prevFounders = {};
+
+        if (!isYearMode && typeof expensesMonthly !== 'undefined') {
+            const mNum = monthSelect.value;
+            if (mNum && expensesMonthly[mNum]) {
+                const em = expensesMonthly[mNum];
+                const emPrev = expensesMonthly[mNum + '_prev'];
+                curFounders = em.founders_detail || {};
+                prevFounders = emPrev ? (emPrev.founders_detail || {}) : {};
+            }
+        }
+        
+        if (isYearMode && typeof expensesDetail !== 'undefined') {
+            curFounders = expensesDetail.current.founders || {};
+            prevFounders = expensesDetail.prev.founders || {};
+        }
+
+        let detailHtml = '<table><thead><tr><th>Учредитель</th><th>2026</th><th>2025</th></tr></thead><tbody>';
+
+        const foundersNames = ['В.И.', 'Е.В.', 'С.И.', 'Р.А.', 'А.В.'];
+
+        foundersNames.forEach(name => {
+            detailHtml += '<tr><td>' + name + '</td><td>' + fmt(curFounders[name] || 0) + ' ₽</td><td>' + fmt(prevFounders[name] || 0) + ' ₽</td></tr>';
+        });
+
+        detailHtml += '</tbody></table>';
+        detailBlock.innerHTML = detailHtml;
+        detailBlock.style.display = 'block';
+    } else {
+        detailBlock.style.display = 'none';
+    }
+}
+
 function showFirmDetail() {
     const detailBlock = document.getElementById('foundersDetail');
     if (detailBlock.style.display === 'none' || detailBlock.style.display === '') {
