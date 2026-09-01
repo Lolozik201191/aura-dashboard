@@ -474,7 +474,7 @@ function showFoundersDetail() {
     if (detailBlock.style.display === 'none' || detailBlock.style.display === '') {
         let curFounders = {};
         let prevFounders = {};
-        
+
         // Если выбран конкретный месяц — берём помесячные данные
         if (!isYearMode && typeof expensesMonthly !== 'undefined') {
             const mNum = monthSelect.value;
@@ -486,14 +486,20 @@ function showFoundersDetail() {
             }
         }
         
+        // Если "Весь год" — берём годовые данные
+        if (isYearMode && typeof expensesDetail !== 'undefined') {
+            curFounders = expensesDetail.current.founders || {};
+            prevFounders = expensesDetail.prev.founders || {};
+        }
+
         let detailHtml = '<table style="width:100%;font-size:11px;margin-top:10px;"><thead><tr><th>Учредитель</th><th>2026</th><th>2025</th></tr></thead><tbody>';
-        
+
         const foundersNames = ['В.И.', 'Е.В.', 'С.И.', 'Р.А.', 'А.В.'];
-        
+
         foundersNames.forEach(name => {
             detailHtml += '<tr><td>' + name + '</td><td>' + fmt(curFounders[name] || 0) + ' ₽</td><td>' + fmt(prevFounders[name] || 0) + ' ₽</td></tr>';
         });
-        
+
         detailHtml += '</tbody></table>';
         detailBlock.innerHTML = detailHtml;
         detailBlock.style.display = 'block';
