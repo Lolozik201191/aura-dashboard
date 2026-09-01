@@ -453,6 +453,21 @@ function diffVal(cur, prev) { const d = cur - prev; return d > 0 ? '+' + fmt(d) 
 function cls(cur, prev) { return cur >= prev ? 'positive' : 'negative'; }
 function clsNds(cur, prev) { return cur <= prev ? 'positive' : 'negative'; }
 
+function metricCard(label, cur, prev, unit, isNds) {
+    const c = isNds ? clsNds(cur, prev) : cls(cur, prev);
+    const cardId = 'card_' + label.replace(/\\s+/g, '_').toLowerCase();
+    const pct = prev !== 0 ? Math.round((cur - prev) / Math.abs(prev) * 100) : 0;
+    const barWidth = Math.min(Math.abs(pct), 100);
+    
+    return '<div class="metric-card" id="' + cardId + '" data-label="' + label + '" onclick="toggleDetail(this)" style="cursor:pointer;">' +
+        '<div class="metric-label">' + label + '</div>' +
+        '<div class="metric-value">' + fmt(cur) + ' <span style="font-size:0.6em;color:#8d6e63;">' + unit + '</span></div>' +
+        '<div class="metric-diff ' + c + '">' + arrow(cur, prev) + ' ' + diffVal(cur, prev) + ' ' + unit + ' (' + pct + '%)</div>' +
+        '<div class="metric-bar" style="margin-top:6px;"><div class="metric-bar-fill ' + c + '" style="width:' + barWidth + '%;"></div></div>' +
+        '<div class="metric-prev">2025: ' + fmt(prev) + ' ' + unit + '</div>' +
+    '</div>';
+}
+
 function metricCardNoClick(label, cur, prev, unit, isNds) {
     const c = isNds ? clsNds(cur, prev) : cls(cur, prev);
     const pct = prev !== 0 ? Math.round((cur - prev) / Math.abs(prev) * 100) : 0;
