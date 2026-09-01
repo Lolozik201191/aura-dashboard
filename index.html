@@ -533,24 +533,23 @@ detailHtml += '<tr><td>' + m + '</td><td>' + fmt(curVal) + '</td><td>' + fmt(pre
 function showFirmDetail() {
     const detailBlock = document.getElementById('foundersDetail');
     if (detailBlock.style.display === 'none' || detailBlock.style.display === '') {
-        let firmCur = 0, firmPrev = 0;
+        let detailHtml = '<table><thead><tr><th>Месяц</th><th>2026</th><th>2025</th></tr></thead><tbody>';
         
-        if (isYearMode && typeof expensesDetail !== 'undefined') {
-            firmCur = expensesDetail.current.firm || 0;
-            firmPrev = expensesDetail.prev.firm || 0;
-        }
-        
-        if (!isYearMode && typeof expensesMonthly !== 'undefined') {
+        if (isYearMode) {
+            const labels = Object.keys(yearData.daily);
+            labels.forEach(m => {
+                const d = yearData.daily[m];
+                detailHtml += '<tr><td>' + m + '</td><td>' + fmt(d.firm_cur || 0) + ' ₽</td><td>' + fmt(d.firm_prev || 0) + ' ₽</td></tr>';
+            });
+        } else {
             const mNum = monthSelect.value;
-            if (mNum && expensesMonthly[mNum]) {
-                firmCur = expensesMonthly[mNum].firm || 0;
-                firmPrev = expensesMonthly[mNum + '_prev'] ? expensesMonthly[mNum + '_prev'].firm : 0;
-            }
+            const em = expensesMonthly[mNum];
+            const emPrev = expensesMonthly[mNum + '_prev'];
+            detailHtml += '<tr><td>' + monthsData[mNum].name + '</td><td>' + fmt(em.firm || 0) + ' ₽</td><td>' + fmt(emPrev ? emPrev.firm : 0) + ' ₽</td></tr>';
         }
         
-        detailBlock.innerHTML = '<table><thead><tr><th>Показатель</th><th>2026</th><th>2025</th></tr></thead><tbody>' +
-            '<tr><td>Расходы фирмы</td><td>' + fmt(firmCur) + ' ₽</td><td>' + fmt(firmPrev) + ' ₽</td></tr>' +
-            '</tbody></table>';
+        detailHtml += '</tbody></table>';
+        detailBlock.innerHTML = detailHtml;
         detailBlock.style.display = 'block';
     } else {
         detailBlock.style.display = 'none';
@@ -560,24 +559,25 @@ function showFirmDetail() {
 function showTotalDetail() {
     const detailBlock = document.getElementById('foundersDetail');
     if (detailBlock.style.display === 'none' || detailBlock.style.display === '') {
-        let totalCur = 0, totalPrev = 0;
+        let detailHtml = '<table><thead><tr><th>Месяц</th><th>2026</th><th>2025</th></tr></thead><tbody>';
         
-        if (isYearMode && typeof expensesDetail !== 'undefined') {
-            totalCur = expensesDetail.current.total || 0;
-            totalPrev = expensesDetail.prev.total || 0;
-        }
-        
-        if (!isYearMode && typeof expensesMonthly !== 'undefined') {
+        if (isYearMode) {
+            const labels = Object.keys(yearData.daily);
+            labels.forEach(m => {
+                const d = yearData.daily[m];
+                detailHtml += '<tr><td>' + m + '</td><td>' + fmt(d.total_cur || 0) + ' ₽</td><td>' + fmt(d.total_prev || 0) + ' ₽</td></tr>';
+            });
+        } else {
             const mNum = monthSelect.value;
             if (mNum && expensesMonthly[mNum]) {
-                totalCur = expensesMonthly[mNum].total || 0;
-                totalPrev = expensesMonthly[mNum + '_prev'] ? expensesMonthly[mNum + '_prev'].total : 0;
+                const em = expensesMonthly[mNum];
+                const emPrev = expensesMonthly[mNum + '_prev'];
+                detailHtml += '<tr><td>' + monthsData[mNum].name + '</td><td>' + fmt(em.total || 0) + ' ₽</td><td>' + fmt(emPrev ? emPrev.total : 0) + ' ₽</td></tr>';
             }
         }
         
-        detailBlock.innerHTML = '<table><thead><tr><th>Показатель</th><th>2026</th><th>2025</th></tr></thead><tbody>' +
-            '<tr><td>Общие расходы</td><td>' + fmt(totalCur) + ' ₽</td><td>' + fmt(totalPrev) + ' ₽</td></tr>' +
-            '</tbody></table>';
+        detailHtml += '</tbody></table>';
+        detailBlock.innerHTML = detailHtml;
         detailBlock.style.display = 'block';
     } else {
         detailBlock.style.display = 'none';
@@ -684,9 +684,9 @@ if (typeof expensesData !== 'undefined') {
     }
     
     let expensesHtml = '<div class="metrics-grid">';
-    expensesHtml += '<div onclick="showFoundersDetail()" style="cursor:pointer;">' + metricCard('Расходы учредителей', foundersCur, foundersPrev, '₽', true) + '</div>';
     expensesHtml += '<div onclick="showFirmDetail()" style="cursor:pointer;">' + metricCard('Расходы фирмы', firmCur, firmPrev, '₽', true) + '</div>';
     expensesHtml += '<div onclick="showTotalDetail()" style="cursor:pointer;">' + metricCard('Общие расходы', totalCur, totalPrev, '₽', true) + '</div>';
+    expensesHtml += '<div onclick="showFoundersDetail()" style="cursor:pointer;">' + metricCard('Расходы учредителей', foundersCur, foundersPrev, '₽', true) + '</div>';
     expensesHtml += '</div>';
     document.getElementById('expensesBlock').innerHTML = expensesHtml;
 }
