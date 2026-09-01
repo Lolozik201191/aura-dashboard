@@ -478,7 +478,7 @@ function toggleDetail(element) {
     const metricName = cardId.replace('card_', '');
     
     let detailHtml = '<div style="font-weight:600;font-size:12px;margin-bottom:6px;">' + label + ' по месяцам</div>';
-    detailHtml += '<table style="width:100%;font-size:10px;"><thead><tr><th>Месяц</th><th>2026</th><th>2025</th><th>Разница</th></tr></thead><tbody>';
+    detailHtml += '<table><thead><tr><th>Месяц</th><th>2026</th><th>2025</th><th>Разница</th></tr></thead><tbody>';
     
    labels.forEach(m => {
     const d = yearData.daily[m];
@@ -553,7 +553,7 @@ function showFoundersDetail() {
             prevFounders = expensesDetail.prev.founders || {};
         }
 
-        let detailHtml = '<table style="width:100%;font-size:11px;margin-top:10px;"><thead><tr><th>Учредитель</th><th>2026</th><th>2025</th></tr></thead><tbody>';
+        let detailHtml = '<table><thead><tr><th>Учредитель</th><th>2026</th><th>2025</th></tr></thead><tbody>';
 
         const foundersNames = ['В.И.', 'Е.В.', 'С.И.', 'Р.А.', 'А.В.'];
 
